@@ -1,8 +1,8 @@
-// ==UserScript==
+ï»¿// ==UserScript==
 // @name         bilibiliEXP
 // @namespace    dazo66
-// @version      0.1
-// @description  ×Ô¶¯Í¶±Ò µã»÷·ÖÏíÁ´½ÓÀ´Ë¢¾­Ñé
+// @version      1.0
+// @description  è‡ªåŠ¨å®Œæˆbç«™çš„æ¯æ—¥æŠ•å¸ æ¯æ—¥åˆ†äº«å’Œæ¯æ—¥é“¶ç“œå­æ¢ç¡¬å¸
 // @author       dazo66
 // @homepage     https://github.com/dazo66/bilibiliEXP
 // @supportURL   https://github.com/dazo66/bilibiliEXP/issues
@@ -79,7 +79,7 @@ function silver2coin() {
     _post('https://api.live.bilibili.com/pay/v1/Exchange/silver2coin', params,
         function(_){},
         function(responseText){
-        sendLog(`[Òø¹Ï×Ó»»Ó²±Ò]${responseText}`);
+        sendLog(`[é“¶ç“œå­æ¢ç¡¬å¸]${responseText}`);
     })
 }
 
@@ -92,9 +92,9 @@ function autoSendCoin() {
     function() {
         var reqJson = JSON.parse(this.responseText);
         coin_num = reqJson["number"];
-        sendLog(`[×Ô¶¯Í¶±Ò]½ñÌìÍ¶±Ò»ñµÃµÄ¾­ÑéÎª:${coin_num}`);
-        sendLog(`[×Ô¶¯Í¶±Ò]µ±Ç°ÊÓÆµµÄavºÅÎª£º${aid}`);
-        sendLog(`[×Ô¶¯Í¶±Ò]µ±Ç°ÊÓÆµµÄ°æÈ¨£º${copyright}`);
+        sendLog(`[è‡ªåŠ¨æŠ•å¸]ä»Šå¤©æŠ•å¸è·å¾—çš„ç»éªŒä¸º:${coin_num}`);
+        sendLog(`[è‡ªåŠ¨æŠ•å¸]å½“å‰è§†é¢‘çš„avå·ä¸ºï¼š${aid}`);
+        sendLog(`[è‡ªåŠ¨æŠ•å¸]å½“å‰è§†é¢‘çš„ç‰ˆæƒï¼š${copyright}`);
         if (coin_num < 50) {
 
             var o = Math.random().toString().substr(2);
@@ -102,10 +102,10 @@ function autoSendCoin() {
             var site = `https://api.bilibili.com/x/web-interface/archive/coins?callback=jqueryCallback_bili_${o}&jsonp=jsonp&aid=${aid}&_=${timestamp}`;
             _get(site, {},
             function() {
-                sendLog(`[×Ô¶¯Í¶±Ò]${this.responseText}`)
+                sendLog(`[è‡ªåŠ¨æŠ•å¸]${this.responseText}`)
                 var matchs = this.responseText.match(/"multiply":\d/);
                 var multiply = matchs[0][matchs[0].length - 1];
-                sendLog(`[×Ô¶¯Í¶±Ò]µ±Ç°¸å¼şÒÑÍ¶±ÒÊıÁ¿Îª£º${multiply}`);
+                sendLog(`[è‡ªåŠ¨æŠ•å¸]å½“å‰ç¨¿ä»¶å·²æŠ•å¸æ•°é‡ä¸ºï¼š${multiply}`);
                 multiply = parseInt(multiply);
                 multiply = (3 - copyright - multiply);
                 if (coin_num / 10 + multiply > 5) {
@@ -118,22 +118,22 @@ function autoSendCoin() {
                 params.append('cross_domain', true);
                 params.append('csrf', csrf);
                 if(multiply != 0) {
-                    sendLog(`[×Ô¶¯Í¶±Ò]³¢ÊÔÍ¶±Ò Í¶±ÒÊıÁ¿${multiply}`);
+                    sendLog(`[è‡ªåŠ¨æŠ•å¸]å°è¯•æŠ•å¸ æŠ•å¸æ•°é‡${multiply}`);
                     _post("https://api.bilibili.com/x/web-interface/coin/add", params,
                     function(req){},
                     function(responseText2) {
                         sendLog(responseText2);
                         sendedCoin = coin_num / 10 + multiply
                         localStorage.setItem('sendedCoin',sendedCoin);
-                        sendLog(`[×Ô¶¯Í¶±Ò]½ñÌìÒÑ¾­Í¶ÁË${sendedCoin}`)
+                        sendLog(`[è‡ªåŠ¨æŠ•å¸]ä»Šå¤©å·²ç»æŠ•äº†${sendedCoin}`)
                     });
                 } else {
-                    sendLog(`[×Ô¶¯Í¶±Ò]µ±Ç°¸å¼şÃ»ÓĞ¿ÉÍ¶±ÒÊı`);
+                    sendLog(`[è‡ªåŠ¨æŠ•å¸]å½“å‰ç¨¿ä»¶æ²¡æœ‰å¯æŠ•å¸æ•°`);
                 }
             })
 
         } else {
-            sendLog(`[×Ô¶¯Í¶±Ò]½ñÌìÒÑ¾­Í¶ÁË5¸öÓ²±ÒÀ²`);
+            sendLog(`[è‡ªåŠ¨æŠ•å¸]ä»Šå¤©å·²ç»æŠ•äº†5ä¸ªç¡¬å¸å•¦`);
         }
     });
 }
@@ -151,22 +151,22 @@ function autoShare(){
 
 function run() {
     if(lastDate === '' || lastDate === null || lastDate != currentDate) {
-        sendLog(`[bilibiliEXP]¿ªÊ¼»»Ó²±Ò`)
+        sendLog(`[bilibiliEXP]å¼€å§‹æ¢ç¡¬å¸`)
         silver2coin();
     } else {
-        sendLog(`[bilibiliEXP]½ñÌì²»ÔÙĞèÒª»»Ó²±ÒÁË`)
+        sendLog(`[bilibiliEXP]ä»Šå¤©ä¸å†éœ€è¦æ¢ç¡¬å¸äº†`)
     }
     if(lastDate === '' || lastDate === null || lastDate != currentDate) {
-        sendLog(`[bilibiliEXP]¿ªÊ¼×Ô¶¯·ÖÏí`)
+        sendLog(`[bilibiliEXP]å¼€å§‹è‡ªåŠ¨åˆ†äº«`)
         autoShare();
     } else {
-        sendLog(`[bilibiliEXP]½ñÌì²»ÔÙ·ÖÏíÁË`)
+        sendLog(`[bilibiliEXP]ä»Šå¤©ä¸å†åˆ†äº«äº†`)
     }
     if(lastDate === '' || lastDate === null || lastDate != currentDate || sendedCoin < 5) {
-        sendLog(`[bilibiliEXP]¿ªÊ¼ËÍÓ²±Ò`)
+        sendLog(`[bilibiliEXP]å¼€å§‹é€ç¡¬å¸`)
         autoSendCoin();
     } else {
-        sendLog(`[bilibiliEXP]½ñÌìÒÑ¾­²»ĞèÒªËÍÓ²±ÒÁË`)
+        sendLog(`[bilibiliEXP]ä»Šå¤©å·²ç»ä¸éœ€è¦é€ç¡¬å¸äº†`)
     }
     localStorage.setItem("lastDate", currentDate)
 };
