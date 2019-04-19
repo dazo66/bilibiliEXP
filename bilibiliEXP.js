@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name         bilibiliEXP
 // @namespace    dazo66
-// @version      1.0
+// @version      1.1
 // @description  自动完成b站的每日投币 每日分享和每日银瓜子换硬币
 // @author       dazo66
 // @homepage     https://github.com/dazo66/bilibiliEXP
@@ -95,7 +95,7 @@ function autoSendCoin() {
         sendLog(`[自动投币]今天投币获得的经验为:${coin_num}`);
         sendLog(`[自动投币]当前视频的av号为：${aid}`);
         sendLog(`[自动投币]当前视频的版权：${copyright}`);
-        if (coin_num < 50) {
+        if (coin_num < 50 && sendedCoin * 10 <= coin_num) {
 
             var o = Math.random().toString().substr(2);
             var timestamp = new Date().getTime();
