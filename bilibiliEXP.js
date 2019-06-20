@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name         bilibiliEXP
 // @namespace    dazo66
-// @version      1.2
+// @version      1.2.1
 // @description  自动完成b站的每日投币 每日分享和每日银瓜子换硬币
 // @author       dazo66
 // @homepage     https://github.com/dazo66/bilibiliEXP
