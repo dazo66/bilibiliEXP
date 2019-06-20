@@ -10,7 +10,7 @@
 // @updateURL    https://raw.githubusercontent.com/dazo66/bilibiliEXP/master/bilibiliEXP.js
 // @include      *://www.bilibili.com/video/av*
 // @icon         https://raw.githubusercontent.com/the1812/Bilibili-Evolved/master/images/logo-small.png
-// @grant        none
+// @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
 var aid = window.aid;
