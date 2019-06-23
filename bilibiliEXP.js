@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name         bilibiliEXP
 // @namespace    dazo66
-// @version      1.2.1
+// @version      1.3
 // @description  自动完成b站的每日投币 每日分享和每日银瓜子换硬币
 // @author       dazo66
 // @homepage     https://github.com/dazo66/bilibiliEXP
@@ -13,8 +13,7 @@
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
-var aid = window.aid;
-var loc_url = window.location.href;
+var loc_url = this.location.href;
 var currentDate = (new Date()).getDate();
 var lastDate = localStorage.getItem("lastDate");
 var sendedCoin = localStorage.getItem("sendedCoin");
@@ -87,7 +86,8 @@ function autoSendCoin() {
     if (lastDate != currentDate) {
         sendedCoin = 0;
     }
-    var video_date = window.vd;
+    var video_date = this.vd;
+    var aid = video_date.aid;
     var copyright = video_date.copyright;
     var coin_num = 50;
     _get("https://www.bilibili.com/plus/account/exp.php", {},
@@ -140,7 +140,9 @@ function autoSendCoin() {
     });
 }
 function autoShare(){
-    var params = 'aid='+aid +'&'+'csrf='+getCookie("bili_jct");
+    var video_date = this.vd;
+    var aid = video_date.aid;
+    var params = 'aid='+ aid +'&'+ 'csrf='+getCookie("bili_jct");
     _post("https://api.bilibili.com/x/web-interface/share/add", params,
     function(req){
         req.setRequestHeader("Content-type","application/x-www-form-urlencoded");
