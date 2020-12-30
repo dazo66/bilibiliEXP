@@ -1,14 +1,14 @@
 ﻿// ==UserScript==
 // @name         bilibiliEXP
 // @namespace    dazo66
-// @version      1.3
+// @version      1.3.1
 // @description  自动完成b站的每日投币 每日分享和每日银瓜子换硬币
 // @author       dazo66
 // @homepage     https://github.com/dazo66/bilibiliEXP
 // @supportURL   https://github.com/dazo66/bilibiliEXP/issues
 // @run-at       document-end
 // @updateURL    https://raw.githubusercontent.com/dazo66/bilibiliEXP/master/bilibiliEXP.js
-// @include      *://www.bilibili.com/video/av*
+// @include      *://www.bilibili.com/video/*
 // @icon         https://raw.githubusercontent.com/the1812/Bilibili-Evolved/master/images/logo-small.png
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
@@ -34,7 +34,7 @@ function _post(path, params, hender, onload) {
     req.withCredentials = true;
     req.open("POST", path);
     hender(req)
-    //req.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    req.setRequestHeader("content-type","application/x-www-form-urlencoded");
     req.onreadystatechange = function() { // Call a function when the state changes.
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             onload(req.responseText);
