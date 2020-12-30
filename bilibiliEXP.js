@@ -145,6 +145,16 @@ function autoSendCoin() {
                 if (coin_num / 10 + multiply > 5) {
                     multiply = 1;
                 }
+                if (sendedCoin + multiply > maxCoin) {
+                    sendLog(`[自动投币]超过了可投币的数目 已停止投币`);
+                    return
+                }
+                if (multiply == 2) {
+                    if (sendedCoin + 1 > maxCoin) {
+                        sendLog(`[自动投币]超过了可投币的数目 已停止投币`);
+                        return
+                    }
+                }
                 var params = "";
                 params += 'aid' + '=' + aid + '&';
                 params += 'multiply' + '=' + multiply + '&';
@@ -208,12 +218,8 @@ function run() {
         sendLog(`[bilibiliEXP]今天不再分享了`)
     }
     if(lastDate === '' || lastDate === null || lastDate != currentDate || sendedCoin < 5) {
-        if(sendedCoin < maxCoin) {
-            sendLog(`[bilibiliEXP]开始送硬币`);
-            autoSendCoin();
-        } else {
-            sendLog(`[bilibiliEXP]超过了今天可送的最大数目，已停止送硬币`);
-        }
+        sendLog(`[bilibiliEXP]开始送硬币`);
+        autoSendCoin();
     } else {
         sendLog(`[bilibiliEXP]今天已经不需要送硬币了`)
     }
