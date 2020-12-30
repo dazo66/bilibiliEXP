@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name         bilibiliEXP
 // @namespace    dazo66
-// @version      1.3.8
+// @version      1.3.9
 // @description  自动完成b站的每日投币 每日分享和每日银瓜子换硬币
 // @author       dazo66
 // @homepage     https://github.com/dazo66/bilibiliEXP
@@ -26,6 +26,7 @@
  *     设置每日投币最大数目（x表示每日自动投币的数目，在0-5之间，0表示不投币，默认为5） 
  *          localStorage.setItem('maxCoin', x)
  * 
+ * 指令执行后出现 [undefined] 字样就说明成功了
  */
 
 
@@ -188,6 +189,7 @@ function autoSendCoin() {
             })
 
         } else {
+            localStorage.setItem('sendedCoin', 5);
             sendLog(`[自动投币]今天已经投了5个硬币啦`);
         }
     });
