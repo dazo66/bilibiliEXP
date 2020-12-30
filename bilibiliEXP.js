@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name         bilibiliEXP
 // @namespace    dazo66
-// @version      1.3.7
+// @version      1.3.8
 // @description  自动完成b站的每日投币 每日分享和每日银瓜子换硬币
 // @author       dazo66
 // @homepage     https://github.com/dazo66/bilibiliEXP
@@ -33,11 +33,15 @@
 var loc_url = this.location.href;
 var currentDate = (new Date()).getDate();
 var lastDate = localStorage.getItem("lastDate");
-var sendedCoin = localStorage.getItem("sendedCoin");
+var sendedCoin = localStorage.getItem('sendedCoin');
 var csrf = getCookie("bili_jct");
 
 var isSilver2coin = localStorage.getItem("isSilver2coin");
 var maxCoin = localStorage.getItem("maxCoin");
+if (lastDate == null) {
+    lastDate = currentDate - 1
+    localStorage.setItem('lastDate', lastDate)
+}
 if (isSilver2coin == null) {
     isSilver2coin = true
     localStorage.setItem('isSilver2coin', true)
@@ -50,7 +54,10 @@ if (sendedCoin == null) {
     sendedCoin = 0
     localStorage.setItem('sendedCoin', 0)
 }
-
+lastDate = parseInt(lastDate)
+sendedCoin = parseInt(sendedCoin)
+isSilver2coin = Boolean(isSilver2coin)
+maxCoin = parseInt(maxCoin)
 
 function setTimeOut(){
     window.setTimeout(function() {
@@ -201,7 +208,7 @@ function autoShare(){
 
 function run() {
     sendLog(`[bilibiliEXP]上次投币日期是${lastDate}当前投币数为${sendedCoin}`)
-    if (isSilver2coin) {
+    if (isSilver2coin == "false") {
         if(lastDate === '' || lastDate === null || lastDate != currentDate) {
             sendLog(`[bilibiliEXP]开始换硬币`);
             silver2coin();
