@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name         bilibiliEXP
 // @namespace    dazo66
-// @version      1.3.6
+// @version      1.3.7
 // @description  自动完成b站的每日投币 每日分享和每日银瓜子换硬币
 // @author       dazo66
 // @homepage     https://github.com/dazo66/bilibiliEXP
@@ -201,15 +201,15 @@ function autoShare(){
 
 function run() {
     sendLog(`[bilibiliEXP]上次投币日期是${lastDate}当前投币数为${sendedCoin}`)
-    if(lastDate === '' || lastDate === null || lastDate != currentDate) {
-        if (isSilver2coin) {
+    if (isSilver2coin) {
+        if(lastDate === '' || lastDate === null || lastDate != currentDate) {
             sendLog(`[bilibiliEXP]开始换硬币`);
             silver2coin();
         } else {
-            sendLog(`[bilibiliEXP]换硬币功能已关闭`)
+            sendLog(`[bilibiliEXP]今天不再需要换硬币了`)
         }
     } else {
-        sendLog(`[bilibiliEXP]今天不再需要换硬币了`)
+        sendLog(`[bilibiliEXP]换硬币功能已关闭`)
     }
     if(lastDate === '' || lastDate === null || lastDate != currentDate) {
         sendLog(`[bilibiliEXP]开始自动分享`)
