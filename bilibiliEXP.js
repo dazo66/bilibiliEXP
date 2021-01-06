@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name         bilibiliEXP
 // @namespace    dazo66
-// @version      1.3.9
+// @version      1.4
 // @description  自动完成b站的每日投币 每日分享和每日银瓜子换硬币
 // @author       dazo66
 // @homepage     https://github.com/dazo66/bilibiliEXP
@@ -18,13 +18,21 @@
  * 可以通过F12的控制台进行设置自动执行的行为
  * 使用方法：
  * 
- *     关闭自动银瓜子换硬币 
+ *     （默认开启）关闭自动银瓜子换硬币 
  *          localStorage.setItem('isSilver2coin', false)
- *     (默认)开启自动银瓜子换硬币 
+ * 
+ *     （默认开启）开启自动银瓜子换硬币 
  *          localStorage.setItem('isSilver2coin', true)
  *     
  *     设置每日投币最大数目（x表示每日自动投币的数目，在0-5之间，0表示不投币，默认为5） 
  *          localStorage.setItem('maxCoin', x)
+ * 
+ *     （默认关闭）开启大会员自动充电功能
+ *          localStorage.setItem('isAutoCharge', true)
+ * 
+ *     （默认关闭）关闭大会员自动充电功能
+ *          localStorage.setItem('isAutoCharge', false)
+ *          
  * 
  * 指令执行后出现 [undefined] 字样就说明成功了
  */
@@ -36,29 +44,45 @@ var currentDate = (new Date()).getDate();
 var lastDate = localStorage.getItem("lastDate");
 var sendedCoin = localStorage.getItem('sendedCoin');
 var csrf = getCookie("bili_jct");
+var lastQuick = localStorage.getItem('lastQuick');
+var isAutoCharge = localStorage.getItem("isAutoCharge");
 
 var isSilver2coin = localStorage.getItem("isSilver2coin");
 var maxCoin = localStorage.getItem("maxCoin");
 if (lastDate == null) {
-    lastDate = currentDate - 1
-    localStorage.setItem('lastDate', lastDate)
+    lastDate = currentDate - 1;
+    localStorage.setItem('lastDate', lastDate);
 }
 if (isSilver2coin == null) {
-    isSilver2coin = true
-    localStorage.setItem('isSilver2coin', true)
+    isSilver2coin = true;
+    localStorage.setItem('isSilver2coin', true);
 }
 if (maxCoin == null) {
-    maxCoin = 5
-    localStorage.setItem('maxCoin', 5)
+    maxCoin = 5;
+    localStorage.setItem('maxCoin', 5);
 }
 if (sendedCoin == null) {
-    sendedCoin = 0
-    localStorage.setItem('sendedCoin', 0)
+    sendedCoin = 0;
+    localStorage.setItem('sendedCoin', 0);
+}
+if (sendedCoin == null) {
+    sendedCoin = 0;
+    localStorage.setItem('sendedCoin', 0);
+}
+if (lastQuick == null) {
+    lastQuick = (new Date()).getMonth();
+    localStorage.setItem('lastQuick', lastQuick);
+}
+if (isAutoCharge == null) {
+    isAutoCharge = false;
+    localStorage.setItem('isAutoCharge', isAutoCharge);
 }
 lastDate = parseInt(lastDate)
 sendedCoin = parseInt(sendedCoin)
 isSilver2coin = Boolean(isSilver2coin)
 maxCoin = parseInt(maxCoin)
+lastQuick = parseInt(parseInt)
+isAutoCharge = Boolean(isAutoCharge)
 
 function setTimeOut(){
     window.setTimeout(function() {
@@ -207,9 +231,29 @@ function autoShare(){
     });
 }
 
+function autoCharge(){
+    var params = "";
+    params += 'bp_num' + '=' + 5 + '&';
+    params += 'is_bp_remains_prior' + '=' + true + '&';
+    params += 'up_mid' + '=' + getCookie('DedeUserID') + '&';
+    params += 'otype' + '=' + 'up' + '&';
+    params += 'oid' + '=' + getCookie("DedeUserID") + '&';
+    params += 'csrf' + '=' + csrf;
+    sendLog(`[自动充电]尝试给自己充电`);
+    _post("https://api.bilibili.com/x/ugcpay/web/v2/trade/elec/pay/quick", params,
+        function(req){
+            req.setRequestHeader("Accept", "application/json, text/plain, */*");
+            req.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        },
+        function(responseText2) {
+            sendLog(responseText2);
+            sendLog(`[自动充电]自动给自己充电完成 下个月再执行`);
+    });
+    localStorage.setItem("lastQuick", (new Date()).getMonth());
+}
+
 
 function run() {
-    sendLog(`[bilibiliEXP]上次投币日期是${lastDate}当前投币数为${sendedCoin}`)
     if (isSilver2coin == "false") {
         if(lastDate === '' || lastDate === null || lastDate != currentDate) {
             sendLog(`[bilibiliEXP]开始换硬币`);
@@ -226,13 +270,20 @@ function run() {
     } else {
         sendLog(`[bilibiliEXP]今天不再分享了`)
     }
+    sendLog(`[bilibiliEXP]上次投币日期是${lastDate}当前投币数为${sendedCoin}`)
     if(lastDate === '' || lastDate === null || lastDate != currentDate || sendedCoin < 5) {
         sendLog(`[bilibiliEXP]开始送硬币`);
         autoSendCoin();
     } else {
         sendLog(`[bilibiliEXP]今天已经不需要送硬币了`)
     }
-    localStorage.setItem("lastDate", currentDate)
+    if(isAutoCharge && lastQuick != (new Date()).getMonth()) {
+        sendLog(`[bilibiliEXP]开始给自己充电`);
+        autoCharge();
+    } else {
+        sendLog(`[bilibiliEXP]本月已经充过电了`);
+    }
+    localStorage.setItem("lastDate", currentDate);
 };
 setTimeOut();
 window.setTimeout(function(){
